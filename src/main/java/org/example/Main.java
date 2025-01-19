@@ -13,8 +13,8 @@ public class Main {
         final ParseTree tree = parser.expression();
 
         final SimpleLangEvalVisitor evalVisitor = new SimpleLangEvalVisitor();
-        double res = evalVisitor.visit(tree);
+        final Object res = evalVisitor.visit(tree).getVal();
 
-        System.out.println(String.format("%s = %f", expressionStr, res));
+        System.out.println(String.format("%s = %s", expressionStr, res));
     }
 }
