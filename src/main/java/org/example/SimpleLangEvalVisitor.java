@@ -1,8 +1,19 @@
 package org.example;
 
+import org.example.functionEvaluators.LnEvaluatorFactory;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleLangEvalVisitor extends calculatorBaseVisitor<EvalRes> {
+    private final Map<String, FunctionEvaluatorFactory> functionEvaluatorFactories;
+
+    public SimpleLangEvalVisitor() {
+        functionEvaluatorFactories = new HashMap<>();
+        functionEvaluatorFactories.put(LnEvaluatorFactory.NAME, new LnEvaluatorFactory());
+    }
+
     @Override
     public EvalRes visitEquation(calculatorParser.EquationContext ctx) {
         return EvalRes.newNum(0.0);
@@ -96,8 +107,10 @@ public class SimpleLangEvalVisitor extends calculatorBaseVisitor<EvalRes> {
     public EvalRes visitFunc_(calculatorParser.Func_Context ctx) {
         final String funcName = visit(ctx.funcname()).getFuncName();
         final List<calculatorParser.ExpressionContext> argExpressions = ctx.expression();
-        if (funcName.equals("ln")) {
-            return EvalRes.newNum(Math.log(visit(argExpressions.get(0)).getNum()));
+        final FunctionEvaluatorFactory functionEvaluatorFactory = functionEvaluatorFactories.get(funcName);
+        if (functionEvaluatorFactory != null) {
+            final FunctionEvaluator functionEvaluator = functionEvaluatorFactory.createEvaluator(argExpressions);
+            return functionEvaluator.eval(this);
         }
         throw new UnsupportedOperationException();
     }
