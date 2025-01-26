@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.List;
+
 public class SimpleLangEvalVisitor extends calculatorBaseVisitor<EvalRes> {
     @Override
     public EvalRes visitEquation(calculatorParser.EquationContext ctx) {
@@ -87,12 +89,17 @@ public class SimpleLangEvalVisitor extends calculatorBaseVisitor<EvalRes> {
 
     @Override
     public EvalRes visitVariable(calculatorParser.VariableContext ctx) {
-        return EvalRes.newNum(0.0);
+        return EvalRes.newStr(ctx.VARIABLE().getText());
     }
 
     @Override
     public EvalRes visitFunc_(calculatorParser.Func_Context ctx) {
-        return EvalRes.newFunc(visit(ctx.funcname()).getFuncName());
+        final String funcName = visit(ctx.funcname()).getFuncName();
+        final List<calculatorParser.ExpressionContext> argExpressions = ctx.expression();
+        if (funcName.equals("ln")) {
+            return EvalRes.newNum(Math.log(visit(argExpressions.get(0)).getNum()));
+        }
+        throw new UnsupportedOperationException();
     }
 
     @Override

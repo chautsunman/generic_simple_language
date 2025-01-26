@@ -93,7 +93,7 @@ funcname
     | LOG
     | LN
     | SQRT
-    | VALID_ID_START VALID_ID_CHAR*
+    | VARIABLE
     ;
 
 relop

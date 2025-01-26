@@ -14,7 +14,7 @@ public class SimpleLangEvalVisitorTest extends TestCase {
     }
 
     public void testFuncName() {
-//        assertEquals("foo", evalExpression("foo(1, 2)").getFuncName());
+        assertEquals(0.0, evalExpression("ln(1)").getNum(), UnitTestUtils.EPSILON);
     }
 
     private EvalRes evalExpression(String expressionStr) {

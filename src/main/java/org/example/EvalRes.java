@@ -38,6 +38,10 @@ public class EvalRes {
         return new EvalRes(Type.FUNCTION, Double.NaN, null, false, funcName);
     }
 
+    public boolean isType(Type type) {
+        return this.type == type;
+    }
+
     public Object getVal() {
         if (type == Type.NUMERIC) {
             return num;
